@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+                                                                                
+"features": [
+{ "type": "Feature", "id": 0, "properties": { "ROUTE_NAME": "R000", "STOPS": "<div style='max-height:150px;overflow:auto;'>[経路]\n軽井沢駅南口\n東急ハーヴェスト\n旧軽井沢<\/div>" }, "geometry": { "type": "LineString", "coordinates": [ [ 138.635581, 36.341998 ], [ 138.638485, 36.348258 ], [ 138.634, 36.35667 ] ] } }
+]
+}

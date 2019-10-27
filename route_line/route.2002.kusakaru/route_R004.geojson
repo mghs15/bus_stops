@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+                                                                                
+"features": [
+{ "type": "Feature", "id": 0, "properties": { "ROUTE_NAME": "R004", "STOPS": "<div style='max-height:150px;overflow:auto;'>[経路]\n旧軽井沢\n軽井沢駅北口（２番のりば）<\/div>" }, "geometry": { "type": "LineString", "coordinates": [ [ 138.6341, 36.35694 ], [ 138.636593, 36.343035 ] ] } }
+]
+}
