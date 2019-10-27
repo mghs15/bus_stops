@@ -4,14 +4,14 @@
 
 
 ## バス停ごとの時刻表を作成
-'gtfs_test.R'
+`gtfs_test.R`
 とりあえず、以下のデータを変換。
 [群馬県内バス路線情報（標準的なバス情報フォーマット）](https://gma.jcld.jp/GMA_OPENDATA/)
 のうち、「上信電鉄」と「草軽交通」のデータを利用。
 
 結果は以下のファイル
-'stop.2002.kusakaru.geojson'
-'stops.1013.joshin_bus.geojson'
+`stop.2002.kusakaru.geojson`
+`stops.1013.joshin_bus.geojson`
 
 GTFSの一連のファイルのうち、
 * stops.txt
