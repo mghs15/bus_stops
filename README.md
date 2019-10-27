@@ -14,13 +14,15 @@
 `stops.1013.joshin_bus.geojson`
 
 GTFSの一連のファイルのうち、
+
 * stops.txt
 * stop_times.txt
 * trips.txt
+
 を利用。
 
 バス停のID(stop_id)に紐付けられた時刻表データ(ここでは、arrival_time)を取得。
-また、時刻表データのstop_idに紐づけられた行先(trip_headsign)を取得。
+また、時刻表データのtrip_idに紐づけられた行先(trip_headsign)を取得。
 最後に、GeoJSONとして出力する（[地理院地図](https://maps.gsi.go.jp/)にとりあえず取り込んである程度きれいに表示されることを目標にした）。
 
 ※行先(trip_headsign)はGTFSの必須データではないので注意。
