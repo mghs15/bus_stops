@@ -10,11 +10,7 @@
 [群馬県内バス路線情報（標準的なバス情報フォーマット）](https://gma.jcld.jp/GMA_OPENDATA/)
 のうち、「上信電鉄」と「草軽交通」のデータを利用。
 
-結果は以下のファイル
-
-```stop.2002.kusakaru.geojson```
-
-```stops.1013.joshin_bus.geojson```
+結果は`stops_points`以下に格納した。
 
 GTFSの一連のファイルのうち、
 
@@ -41,12 +37,13 @@ GeoJSONとして出力する際に、
 
 ## 経路のラインデータを作成
 ```gtfs_test2.R```
+
 経路のラインデータは`shapes.txt`に入っているらしいのだが、必須項目ではない。そのため、route_idごとに経由するバス停（stop_id）の経緯度をつないでラインデータとした。
 例として、[群馬県内バス路線情報（標準的なバス情報フォーマット）](https://gma.jcld.jp/GMA_OPENDATA/)のうち、「上信電鉄」と「草軽交通」のデータを利用。
 
-結果は以下の`route_line`に格納した。
+結果は`route_line`以下に格納した。
 
-経緯度を持つバス停のデータとルートID（route_id）を結び付けるには、まず、バス停のID(stop_id)が属する便のID(trip_id)に結び付け、trip_idを使ってroute_idに結びつける必要がある。ライブラリdplyrを使って、データベースのごとくroute.txt、trips.txt、stop.txt、stop.idをjoinしてしまえばよい。また、発車時刻（arrival_time）を使って経由するバス停を並び替えた。あるひとつのルートを経由する便は1つ以上あるが、どれでも同じと考え、ひとつだけ取り出してラインデータを作成した。
+経緯度を持つバス停のデータとルートID（route_id）を結び付けるには、まず、バス停のID(stop_id)が属する便のID(trip_id)に結び付け、trip_idを使ってroute_idに結びつける必要がある。ライブラリdplyrを使って、データベースのごとくroute.txt、trips.txt、stop.txt、stops.txtをjoinしてしまえばよい。また、発車時刻（arrival_time）を使って経由するバス停を並び替えた。あるひとつのルートを経由する便は1つ以上あるが、どれでも同じと考え、ひとつだけ取り出してラインデータを作成した。
 
 
 
