@@ -67,7 +67,7 @@ for(i in 1:length(route_identifier)){
   .lines <- Lines(list(.line), ID=.route)
   .sp_lines <- SpatialLines(list(.lines), proj4string=proj)
   
-  .stops_paste <- "[Œo˜H]"
+  .stops_paste <- "[経路]"
   for(j in 1:length(.rout_sp_data$stop_name)){
     .stops_paste <- paste(.stops_paste, "\n", .rout_sp_data$stop_name[j], sep="")
   }
@@ -81,14 +81,7 @@ for(i in 1:length(route_identifier)){
   writeOGR(.sp_line_df, .outputname, layer="route", driver="GeoJSON", encoding="SJIS")
 }
 
-
+################
 
 head(route_spdat, n=20)
 write.csv(route_spdat, "_test.route.csv")
-
-
-
-
-
-
-
