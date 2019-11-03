@@ -27,6 +27,7 @@ GTFSの一連のファイルのうち、
 ※行先(trip_headsign)はGTFSの必須データではないので注意。
 
 ```gtfs_test.R```
+
 曜日も追加できるように修正　
 
 ### memo
