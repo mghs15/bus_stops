@@ -26,7 +26,8 @@ GTFSの一連のファイルのうち、
 
 ※行先(trip_headsign)はGTFSの必須データではないので注意。
 
-曜日も追加できるように修正　```gtfs_test.R```
+```gtfs_test.R```
+曜日も追加できるように修正　
 
 ### memo
 エンコードの処理が大変だった。「表」がなぜか「表\」と出力されてしまう（原因は、[こういうこと](http://www.kent-web.com/pubc/garble.html)らしい。）。
