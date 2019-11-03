@@ -8,6 +8,12 @@
 ### サンプルデータ
 [こちらの地図](https://mghs15.github.io/bus_stops/map/#13/36.340249/139.033458/&base=pale&ls=pale%7Cstops_5070001007099_201911031905116&disp=11&lcd=stops_5070001007099_201911031905116&vs=c1j0h0k0l0u0t0z0r0s0m0f1&d=vl)でご覧いただけます。
 
+（上記のサイトはあくまで試験用です。元データから、様々な情報を削除しているため、正確な運行情報を示しているわけではございません。）
+
+※上記サイトは、以下の著作物を著作物を加工して利用しています。
+*[群馬県内バス路線情報（標準的なバス情報フォーマット）](https://gma.jcld.jp/GMA_OPENDATA/)、群馬県、[クリエイティブ・コモンズ・ライセンス　表示4.0.国際（外部リンク）](http://creativecommons.org/licenses/by/4.0/deed.ja)
+*[simaps (地理院地図)のソース](https://github.com/gsi-cyberjapan/gsimaps)
+
 ### スクリプト
 ```gtfs_test.R```
 
