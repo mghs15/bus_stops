@@ -10,7 +10,11 @@ setwd("./gtfs.1013.joshin_bus")
 setwd("gtfs.2002.kusakaru")
 setwd("tokachibus")
 
+make_busstop_geojson()
+
 #---------start of code---------
+
+make_busstop_geojson = function(){
 
 #####
 #data import 
@@ -62,6 +66,28 @@ trip_calendar <- trip_calendar %>% left_join(calendar_shc, by="service_id")
 stop_times <- stop_times %>% left_join(trip_calendar, by="trip_id")
 stop_times %>% head()
 
+#時間のフィルタリング
+ymd2time <- function(yyyymmdd){
+  N <- length(yyyymmdd)
+  TS <- NULL
+  for(i in 1:N){
+  str <- yyyymmdd[i]
+    year_l <- substr(str, 1, 4)
+    month_l <- substr(str, 5, 6)
+    date_l <- substr(str, 7, 8)
+    ymd <- paste(year_l, month_l, date_l, sep="-")
+    TS <- c(TS, ymd)
+  }
+  return(TS)
+}
+
+stop_times$start_date  <- as.Date(ymd2time(stop_times$start_date) ) 
+stop_times$end_date  <- as.Date(ymd2time(stop_times$end_date) )
+
+today <- Sys.Date()
+
+stop_times <- stop_times %>% filter(start_date < today | end_date > today)
+
 ########################
 #timetable of each stops
 ########################
@@ -72,6 +98,7 @@ N <- length(timetb_stops)
 for(i in 1:N){
   .stopId <- timetb_stops[i]
   .times_head  <- stop_times %>% filter(stop_id == .stopId) %>% select(departure_time, trip_headsign, calendar_pattern)
+  .times_head$calendar_pattern[is.na(.times_head$calendar_pattern)] <- "不明"
 
   #出力形式の選択
   .is.table <- TRUE
@@ -82,7 +109,7 @@ for(i in 1:N){
   #時間部分
   .times_hr <- substr(.times_head$departure_time, 1, 2) 
   #構成要素 （時刻、行先、平日休日　等）をここで作ってしまう。
-  .times_mm <- paste("<li>", substr(.times_head$departure_time, 4, 5), " (", .times_head$trip_headsign , ") ", .times_head$calendar_pattern, "</li>", sep="") 
+  .times_mm <- paste("", substr(.times_head$departure_time, 4, 5), " (", .times_head$trip_headsign , ") ", .times_head$calendar_pattern, "", sep="") 
   .time_head <- data.frame(hour=.times_hr, min_contents=.times_mm)
 #  .time_head <- data.frame(hour=.times_hr, min_contents=.times_mm, trip_headsign=.times_head$trip_headsign)
 #  .time_head <- .time_head %>% tidyr::spread(key = hour , value = min_contents)
@@ -92,8 +119,8 @@ for(i in 1:N){
   for(k in 1:length(.unique_hours) ){
     .unique_hour <- .unique_hours[k]
     .unique_hour_subset <- subset(.time_head, hour == .unique_hour)
-    .times_table_unique_paste <- paste(as.vector(.unique_hour_subset$min_contents), collapse = "")
-    .times_paste <- paste(.times_paste, "<tr><td>", .unique_hours[k], "</td><td><ul>", .times_table_unique_paste, "</ul></td></tr>", sep="")
+    .times_table_unique_paste <- paste(as.vector(.unique_hour_subset$min_contents), collapse = "<br>")
+    .times_paste <- paste(.times_paste, "<tr><td>", .unique_hours[k], "</td><td>", .times_table_unique_paste, "</td></tr>", sep="")
   }
 
   .times_paste <- paste("<table  border='1'>", .times_paste, "</table>", sep="") 
@@ -144,12 +171,15 @@ stops.df.n <- stops.df %>% select("stop_name", "stop_lat", "stop_lon", "stop_id"
 #outpu as GeoJSON (use GDAL)
 coordinates(stops.df.n) = c("stop_lon", "stop_lat")
 stops.df.n@data <- stops.df.n@data %>% select("stop_name", "time_table")
-colnames(stops.df.n@data) <- c("name", "時刻表") #　"時刻表n" -> "時刻表\n" REF) http://www.kent-web.com/pubc/garble.html
+stops.df.n@data <- stops.df.n@data %>% mutate( bikou=rep(paste(Sys.Date(), "作成"), nrow(stops.df.n@data)) )
+colnames(stops.df.n@data) <- c("name", "時刻表", "備考")
 
 plot(stops.df.n)
 class(stops.df.n)
-writeOGR(stops.df.n, "stops.geojson", layer="layer", driver="GeoJSON", encoding="SJIS")
+output_tile_name <- paste("stops_", as.character(Sys.Date()), ".geojson", sep="") 
+writeOGR(stops.df.n, output_tile_name , layer="layer", driver="GeoJSON", encoding="SJIS")
 
+} #全体をFunctionに。
 #---------end of code---------
 
 
