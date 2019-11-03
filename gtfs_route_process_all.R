@@ -1,6 +1,8 @@
 library("rgdal")
 library("dplyr")
 library(sp)
+setwd("gtfs/")
+setwd("set/")
 setwd("../")
 getwd()
 setwd("./gtfs.1013.joshin_bus")
@@ -70,7 +72,7 @@ tail(calendar)
 #JOIN
 #####
 route_spdat <- stops %>%  left_join(stop_times, by = "stop_id")  %>% left_join(trips, by = "trip_id")  %>% left_join(routes, by = "route_id") 
-route_spdat <- route_spdat %>%  select("route_id", "trip_id", "service_id", "stop_id", "arrival_time", "stop_name", "stop_lat", "stop_lon")
+route_spdat <- route_spdat %>%  select("route_id", "trip_id", "service_id", "stop_id", "stop_sequence", "arrival_time", "stop_name", "stop_lat", "stop_lon")
 route_spdat <- na.omit(route_spdat)
 route_spdat <- route_spdat[order(route_spdat$route_id), ]
 route_spdat <- route_spdat[order(route_spdat$trip_id), ] 
@@ -106,7 +108,7 @@ V_stops_paste <- NULL
 for(i in 1:length(route_identifier)){
   .route <- route_identifier[i]
   .rout_sp_data <- LDAT[[.route]][[1]] # Å‰‚Ì1‚Â‚¾‚¯—˜—p
-  .rout_sp_data <- .rout_sp_data[order(as.POSIXct(.rout_sp_data$arrival_time, format="%H:%M:%S")),] 
+  .rout_sp_data <- .rout_sp_data[order(.rout_sp_data$stop_sequence),] 
   .stops_paste <- ""
   for(j in 1:length(.rout_sp_data$stop_name)){
     .stops_paste <- paste(.stops_paste, "<tr><td>", .rout_sp_data$stop_name[j], "</td></tr>", sep="")
