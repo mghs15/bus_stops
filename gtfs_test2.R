@@ -67,7 +67,7 @@ for(i in 1:length(route_identifier)){
   .lines <- Lines(list(.line), ID=.route)
   .sp_lines <- SpatialLines(list(.lines), proj4string=proj)
   
-  .stops_paste <- "[Œo˜H]"
+  .stops_paste <- "[Å’oËœH]"
   for(j in 1:length(.rout_sp_data$stop_name)){
     .stops_paste <- paste(.stops_paste, "\n", .rout_sp_data$stop_name[j], sep="")
   }
