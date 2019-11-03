@@ -16,9 +16,9 @@ make_busstop_geojson()
 
 make_busstop_geojson = function(){
 
-#####
+############
 #data import 
-#####
+############
 #stops
 stops <- read.csv("stops.txt", header = TRUE, fileEncoding = "utf8", stringsAsFactors = FALSE)
 head(stops)
@@ -88,6 +88,7 @@ today <- Sys.Date()
 
 stop_times <- stop_times %>% filter(start_date < today | end_date > today)
 
+
 ########################
 #timetable of each stops
 ########################
@@ -99,6 +100,7 @@ for(i in 1:N){
   .stopId <- timetb_stops[i]
   .times_head  <- stop_times %>% filter(stop_id == .stopId) %>% select(departure_time, trip_headsign, calendar_pattern)
   .times_head$calendar_pattern[is.na(.times_head$calendar_pattern)] <- "不明"
+  .times_head  <- .times_head[order(as.POSIXct(.times_head$departure_time, format="%H:%M:%S")),]  
 
   #出力形式の選択
   .is.table <- TRUE
@@ -111,6 +113,7 @@ for(i in 1:N){
   #構成要素 （時刻、行先、平日休日　等）をここで作ってしまう。
   .times_mm <- paste("", substr(.times_head$departure_time, 4, 5), " (", .times_head$trip_headsign , ") ", .times_head$calendar_pattern, "", sep="") 
   .time_head <- data.frame(hour=.times_hr, min_contents=.times_mm)
+
 #  .time_head <- data.frame(hour=.times_hr, min_contents=.times_mm, trip_headsign=.times_head$trip_headsign)
 #  .time_head <- .time_head %>% tidyr::spread(key = hour , value = min_contents)
 
@@ -130,8 +133,6 @@ for(i in 1:N){
   }else{　#出力形式の選択
 
 ##########
-  #時間をPOSIXに直しておく。
-  .times_head  <- .times_head[order(as.POSIXct(.times_head$departure_time, format="%H:%M:%S")),]  
 
 #構成要素 （時刻、行先、平日休日　等）
 #  .head  <- stop_times %>% filter(stop_id == .stopId) %>% select(trip_headsign)
@@ -168,7 +169,10 @@ head(stop_times_DAT)
 #merge 
 stops.df.n <- stops.df %>% select("stop_name", "stop_lat", "stop_lon", "stop_id") %>% left_join(stop_times_DAT, by="stop_id")
 
-#outpu as GeoJSON (use GDAL)
+############
+#data output 
+############
+#output as GeoJSON (use GDAL)
 coordinates(stops.df.n) = c("stop_lon", "stop_lat")
 stops.df.n@data <- stops.df.n@data %>% select("stop_name", "time_table")
 stops.df.n@data <- stops.df.n@data %>% mutate( bikou=rep(paste(Sys.Date(), "作成"), nrow(stops.df.n@data)) )
