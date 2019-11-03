@@ -35,20 +35,20 @@ calendar_DAT <- NULL
 for(i in 1:nrow(calendar)){
   calend <- calendar[i,]
   if(calend$monday == 1 & calend$tuesday == 1 & calend$wednesday == 1 & calend$thursday == 1 & calend$friday == 1 & calend$saturday == 1 & calend$sunday == 1 ){
-    sche_day <- "‘S“ú"
+    sche_day <- "å…¨æ—¥"
   }else if(calend$monday == 1 & calend$tuesday == 1 & calend$wednesday == 1 & calend$thursday == 1 & calend$friday == 1 & calend$saturday == 0 & calend$sunday == 0 ){
-    sche_day <- "<span style='color: #0000FF;'>•½“ú‚Ì‚İ</span>"
+    sche_day <- "<span style='color: #0000FF;'>å¹³æ—¥ã®ã¿</span>"
   }else if(calend$monday == 0 & calend$tuesday == 0 & calend$wednesday == 0 & calend$thursday == 0 & calend$friday == 0 & calend$saturday == 1 & calend$sunday == 1){
-    sche_day <- "<span style='color: #FF0000;'>‹x“ú‚Ì‚İ</span>"
+    sche_day <- "<span style='color: #FF0000;'>ä¼‘æ—¥ã®ã¿</span>"
   }else{
     sche_day <- ""
-    if(calend$monday == 1){sche_day <- paste(sche_day, "Œ", sep="")}
-    if(calend$tuesday == 1){sche_day <- paste(sche_day, "‰Î", sep="")}
-    if(calend$wednesday == 1){sche_day <- paste(sche_day, "…", sep="")}
-    if(calend$thursday == 1){sche_day <- paste(sche_day, "–Ø", sep="")}
-    if(calend$friday == 1){sche_day <- paste(sche_day, "‹à", sep="")}
-    if(calend$saturday == 1){sche_day <- paste(sche_day, "“y", sep="")}
-    if(calend$sunday == 1){sche_day <- paste(sche_day, "“ú", sep="")}
+    if(calend$monday == 1){sche_day <- paste(sche_day, "æœˆ", sep="")}
+    if(calend$tuesday == 1){sche_day <- paste(sche_day, "ç«", sep="")}
+    if(calend$wednesday == 1){sche_day <- paste(sche_day, "æ°´", sep="")}
+    if(calend$thursday == 1){sche_day <- paste(sche_day, "æœ¨", sep="")}
+    if(calend$friday == 1){sche_day <- paste(sche_day, "é‡‘", sep="")}
+    if(calend$saturday == 1){sche_day <- paste(sche_day, "åœŸ", sep="")}
+    if(calend$sunday == 1){sche_day <- paste(sche_day, "æ—¥", sep="")}
   }
   calendar_DAT <- c(calendar_DAT, sche_day)
 }
@@ -67,25 +67,25 @@ stop_times %>% head()
 timetb_stops <- as.character(unique(stop_times$stop_id))
 stop_times_DAT <- NULL 
 N <- length(timetb_stops)
-#for•¶“à‚Ì‚İ‚Å—˜—p‚·‚é•Ï”‚É‚ÍA“ª‚Éu.v‚ğ•t—^
+#foræ–‡å†…ã®ã¿ã§åˆ©ç”¨ã™ã‚‹å¤‰æ•°ã«ã¯ã€é ­ã«ã€Œ.ã€ã‚’ä»˜ä¸
 for(i in 1:N){
   .stopId <- timetb_stops[i]
   .times_head  <- stop_times %>% filter(stop_id == .stopId) %>% select(departure_time, trip_headsign, calendar_pattern)
   .times_head  <- .times_head[order(as.POSIXct(.times_head$departure_time, format="%H:%M:%S")),]
 
-#\¬—v‘f iAsæA•½“ú‹x“ú@“™j
+#æ§‹æˆè¦ç´  ï¼ˆæ™‚åˆ»ã€è¡Œå…ˆã€å¹³æ—¥ä¼‘æ—¥ã€€ç­‰ï¼‰
 #  .head  <- stop_times %>% filter(stop_id == .stopId) %>% select(trip_headsign)
   .times <- substr(as.character(.times_head[,1]), 1, 5) # [,1] =>  as vector
   .heads <- as.character(.times_head[,2]) 
   .schedule <- as.character(.times_head[,3]) 
 
-#ƒ|ƒbƒvƒAƒbƒv•¶š—ñ‚ğì¬B
+#ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—æ–‡å­—åˆ—ã‚’ä½œæˆã€‚
   .times_paste <- NULL
   for(j in 1:length(.times)){
-    .times_paste <- paste(.times_paste,.times[j], " (", .heads[j], ") ",  .schedule[j], "\n", sep="")
+    .times_paste <- paste(.times_paste, "<li>", .times[j], " (", .heads[j], ") ",  .schedule[j], "</li>", sep="")
   }
   
-  .times_paste <- paste("<div style='max-height:150px;overflow:auto;'>", .times_paste, "</div>", sep="")
+  .times_paste <- paste("<div style='max-height:150px;overflow:auto;'><ul>", .times_paste, "</ul></div>", sep="")
   .times <- c(.stopId, .times_paste)
   stop_times_DAT <- rbind(stop_times_DAT, .times)
 }
@@ -104,7 +104,7 @@ stops.df.n <- stops.df %>% select("stop_name", "stop_lat", "stop_lon", "stop_id"
 #outpu as GeoJSON (use GDAL)
 coordinates(stops.df.n) = c("stop_lon", "stop_lat")
 stops.df.n@data <- stops.df.n@data %>% select("stop_name", "time_table")
-colnames(stops.df.n@data) <- c("name", "•\") #@"•\n" -> "•\\n" REF) http://www.kent-web.com/pubc/garble.html
+colnames(stops.df.n@data) <- c("name", "æ™‚åˆ»è¡¨") #ã€€"æ™‚åˆ»è¡¨n" -> "æ™‚åˆ»è¡¨\n" REF) http://www.kent-web.com/pubc/garble.html
 
 plot(stops.df.n)
 class(stops.df.n)
@@ -123,7 +123,7 @@ writeOGR(stops.df.n, "stops.geojson", layer="layer", driver="GeoJSON", encoding=
 testdata <- stops.df.n@data
 Encoding(testdata[,1])
 
-#@"•\n" -> "•\\n" REF) http://www.kent-web.com/pubc/garble.html
+#ã€€"æ™‚åˆ»è¡¨n" -> "æ™‚åˆ»è¡¨\n" REF) http://www.kent-web.com/pubc/garble.html
 # when read.csv(.... , stringsAsFactors = FALSE, encoding="UTF-8")
 # and writeOGR(... , encoding="sjis"), things goes good.
 # when read.csv(.... , stringsAsFactors = FALSE); (i.e. encoding is not set),
