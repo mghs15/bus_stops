@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+
+<head>
+
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0, ,user-scalable=no" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="description" content="地形図、写真、標高、地形分類、災害情報など、国土地理院が捉えた日本の国土の様子を発信するウェブ地図です。地形図や写真の3D表示も可能。">
+
+  <title>群馬のバス</title>
+
+  <link rel="stylesheet" href="js.lib/leaflet-1.2.0/leaflet.css" />
+  <script type="text/javascript" src="js.lib/leaflet-1.2.0/leaflet.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="./js.lib/jquery/jquery-ui.min.css" />
+  <script type="text/javascript" src="./js.lib/jquery/jquery-1.11.1.min.js"></script>
+
+  <script type="text/javascript" src="./js.lib/jquery/ZeroClipboard2.0.2/ZeroClipboard.js"></script>
+  <script type="text/javascript" src="./js.lib/jquery/jquery.xdomainrequest.min.js"></script>
+  <script type="text/javascript" src="./js.lib/jquery/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="./js.lib/jquery/jquery.ui.touch-punch.js"></script>
+  <script type="text/javascript" src="./js.lib/jquery/jquery.qrcode/jquery.qrcode.min.js"></script>
+  <script type="text/javascript" src="./js.lib/jquery/jquery.csv/jquery.csv.min.js"></script>
+
+  <link rel="stylesheet" href="./js.lib/jquery/jquery.alerts.css" type="text/css" media="all" />
+  <script type="text/javascript" src="./js.lib/jquery/jquery.alerts.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="./js.lib/jquery/colorpicker/jquery.simple-color-picker.css" />
+  <script type="text/javascript" src="./js.lib/jquery/colorpicker/jquery.simple-color-picker.js"></script>
+  <script type="text/javascript" src="./js.lib/jquery/colorpicker/js/colorpicker.js"></script>
+  <link rel="stylesheet" type="text/css" href="./js.lib/jquery/colorpicker/css/colorpicker.css" />
+  <script type="text/javascript" src="./js.lib/jquery/ah-placeholder/jquery.ah-placeholder.js"></script>
+  <script type="text/javascript" src="js.lib/OSGeo/proj4js-combined.js"></script>
+
+
+  <script type="text/javascript" src="js.lib/geotiff.browserify.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="js.lib/leaflet-plugin/leaflet.label/leaflet.label-gsi.css" />
+  <script type="text/javascript" src="js.lib/leaflet-plugin/leaflet.label/leaflet.label.js"></script>
+  <link rel="stylesheet" type="text/css" href="js.lib/leaflet-plugin/Control.MiniMap/Control.MiniMap-gsi.css" />
+  <script type="text/javascript" src="js.lib/leaflet-plugin/Control.MiniMap/Control.MiniMap-gsi.js"></script>
+  <script type="text/javascript" src="js.lib/leaflet-plugin/TileLayer.GeoJSON/TileLayer.GeoJSON-gsi.js"></script>
+  <script type="text/javascript" src="js.lib/leaflet-plugin/leaflet-omnivore/leaflet-omnivore.min.js"></script>
+
+
+  <link rel="stylesheet" type="text/css" href="js.lib/leaflet-plugin/leaflet.draw/leaflet.draw-gsi.css" />
+  <script type="text/javascript" src="js.lib/leaflet-plugin/leaflet.draw/leaflet.draw-gsi.js"></script>
+  <script type="text/javascript" src="js.lib/leaflet-plugin/Leaflet.Sync/L.Map.Sync.js"></script>
+  <script type="text/javascript" src="js.lib/leaflet-plugin/Leaflet.Geodesic/Leaflet.Geodesic.js"></script>
+
+  <script type="text/javascript" src="js.lib/leaflet-plugin/leaflet-hash/leaflet-hash-gsi.js"></script>
+  <script type="text/javascript" src="js.lib/html2canvas.js"></script>
+  <script type="text/javascript" src="js.lib/encoding/encoding.js"></script>
+  <script type="text/javascript" src="js.lib/NoSleep/NoSleep.min.js"></script>
+
+
+  <link rel="stylesheet" type="text/css" href="./css/gsimaps.css" />
+  <script type="text/javascript" src="js/gsimaps.js"></script>
+  
+  <script type="text/javascript" src="js/muni.js"></script>
+  <script type="text/javascript" src="js/jiki.js"></script>
+  <script type="text/javascript">
+    GSI.GLOBALS.isCreditShow = true;
+  </script>
+  
+  <noscript>
+    <div class="noscript">
+      JavaScriptを有効にしてご覧ください。
+    </div>
+  </noscript>
+</head>
+
+<body>
+  <div id="header" class="logo_s">
+    <div class="logoarea">
+            <a style="text-decoration:none;" href="">
+            <div id="title_logo_upper">ばすまっぷ</div>
+            <div id="title_logo_lower">GTFS-JPで遊ぶ</div>
+            </a>
+    </div>
+
+    <div class="magnifyingglass">
+      <img name="magnifyimage" id="magnifyimage" src="./image/system/search.png" />
+    </div>
+    <form name="search_f" id="search_f" autocomplete="off">
+      <input name="query" id="query" value="" type="search" placeholder="例：剱岳 / 金沢市木ノ新保町 / 35度0分0秒 135度0分0秒 / 35.00 135.00 / 54SUE83694920" />
+    </form>
+
+    <div class="help">
+      <a id="title_vectorlogo" href="https://maps.gsi.go.jp/vector/" target="_blank"></a>
+      <a id="title_bookmark" href="javascript:void(0);"></a>
+      <a id="title_help" onclick="HelpButton()">?</a>
+    </div>
+  </div>
+
+  <div id="topmessage"></div>
+  <div id="map"></div>
+
+  <div class="gsi_footer gsi_footer_template">
+    <a class="btn" href="javascript:void(0);"></a>
+    <div class="item_frame item_start"><span class="heading">住所:</span><span class="address">----</span><span class="mini_comment">（付近の住所。正確な所属を示すとは限らない。）</span></div>
+    <div class="item_frame latlng"><span class="latlng_60">----</span></div>
+    <div class="item_frame latlng"><span class="latlng_10">----</span>&nbsp;&nbsp;<span class="heading">ズーム:</span><span
+        class="current_zoom"></span></div>
+    <div class="item_frame"><span class="heading">UTMポイント：</span><span class="utm_point">----</span></div>
+    <div class="item_frame"><span class="heading">標高：</span><span class="elevation">----</span><span class="elevationSrc mini_comment_elev"></span></div>
+    <div class="item_frame" style="display:none;"><span class="heading">全国最新写真(シームレス)撮影期間：</span><span class="seamlessinfo">----</span></div>
+
+    <a href="https://maps.gsi.go.jp/help/howtouse.html#h2-3" class="normalbutton footer_description_btn" target="_blank">表示値の説明</a>
+  </div>
+
+
+  <div id="help">
+    <div class="help_content"  style="text-align:center"  title="注意事項">
+      <p>公開されている「標準的なバス情報フォーマット」を利用した、バス停マップです。</p>
+      <p>参考　<a href='http://www.mlit.go.jp/sogoseisaku/transport/sosei_transport_tk_000067.html'>国土交通省「経路検索の充実に向けた取組」</a></p>
+      
+      <p>実験的かつ機械的に処理しているものですので、精度等は保障できません。</p>
+      
+      <p>このウェブサイトでは、以下の著作物を加工して利用しています。</p>
+      <p><a src='https://gma.jcld.jp/GMA_OPENDATA/'>群馬県内バス路線情報（標準的なバス情報フォーマット）</a>、群馬県、<a href='http://creativecommons.org/licenses/by/4.0/deed.ja'>クリエイティブ・コモンズ・ライセンス　表示4.0.国際（外部リンク）</a></p>
+    </div>
+  </div>
+  
+
+
+
+</body>
+
+</html>
