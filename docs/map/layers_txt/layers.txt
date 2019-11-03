@@ -1,5 +1,8 @@
 [
 	{
 		"url":"./layers_busstop.txt"
+	},
+	{
+		"url":"./layers_busroute.txt"
 	}
 ]
