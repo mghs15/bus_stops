@@ -27,7 +27,7 @@ for(i in 1:nrow(agency_info_df)){
   lid <- paste('"id": "', lid, '",', sep="")
   url <- paste('"url": "', url, '",', sep="")
 
-  layerinfo <- paste('{"type": "Layer",', title, lid, url, '"cocotile": false,', '"html": "以下の著作物を利用。<br><a src=\'https://gma.jcld.jp/GMA_OPENDATA/\'>群馬県内バス路線情報（標準的なバス情報フォーマット）</a>、群馬県、<a href=\'http://creativecommons.org/licenses/by/4.0/deed.ja\'>クリエイティブ・コモンズ・ライセンス　表示4.0.国際（外部リンク）</a><br>実験的なものであり、正確性は保障できません。"},', sep="\n")
+  layerinfo <- paste('{"type": "Layer",', title, lid, url, '"cocotile": false,', '"html": "実験的なものであり、正確性は保障できません。<br>以下の著作物を利用。<br><a href=\'https://gma.jcld.jp/GMA_OPENDATA/\' target=\'_blank\'>群馬県内バス路線情報（標準的なバス情報フォーマット）</a>、群馬県、<a href=\'http://creativecommons.org/licenses/by/4.0/deed.ja\' target=\'_blank\'>クリエイティブ・コモンズ・ライセンス　表示4.0.国際（外部リンク）</a>"},', sep="\n")
   D_layerinfo <- paste(D_layerinfo, layerinfo, sep="\n")
 }
 write.table(  D_layerinfo , "layers_busstop.txt", quote = FALSE, row.names=FALSE, col.names=FALSE)
