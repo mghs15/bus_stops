@@ -1,3 +1,9 @@
+{"layers": [
+{"type": "LayerGroup",
+"title": "バスの運行経路",
+"open": false,
+"toggleall": false,
+"entries": [
 {"type": "Layer",
 "title": "高速バス【群馬】",
 "id": "busroute_NA_201911041051181",
@@ -214,3 +220,4 @@
 "url": "./data/route/busroute_1100001008411_2019110410513236.geojson",
 "cocotile": false,
 "html": "実験的なものであり、正確性は保障できません。<br>以下の著作物を利用。<br><a href='https://gma.jcld.jp/GMA_OPENDATA/' target='_blank'>群馬県内バス路線情報（標準的なバス情報フォーマット）</a>、群馬県、<a href='http://creativecommons.org/licenses/by/4.0/deed.ja' target='_blank'>クリエイティブ・コモンズ・ライセンス　表示4.0.国際（外部リンク）</a>"}
+]}]}

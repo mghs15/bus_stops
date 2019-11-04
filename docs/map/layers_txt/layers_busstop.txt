@@ -1,6 +1,6 @@
 {"layers": [
 {"type": "LayerGroup",
-"title": "バスの運行経路",
+"title": "バスの停留所",
 "open": false,
 "toggleall": false,
 "entries": [
