@@ -6,7 +6,7 @@
 ## バス停ごとの時刻表を作成
 
 ### サンプルデータ
-[こちらの地図](https://mghs15.github.io/bus_stops/map/#13/36.340249/139.033458/&base=pale&ls=pale%7Cstops_5070001007099_201911041048046&disp=11&lcd=stops_5070001007099_201911041048046&vs=c1j0h0k0l0u0t0z0r0s0m0f1&d=vl)でご覧いただけます。
+[こちらの地図](https://mghs15.github.io/bus_stops/map/#13/36.340249/139.033458/&base=pale&ls=pale%7Cstops_5070001007099_gtfs.1013.joshin_bus.geojson&disp=11&lcd=stops_5070001007099_gtfs.1013.joshin_bus.geojson&vs=c1j0h0k0l0u0t0z0r0s0m0f1&d=vl)でご覧いただけます。
 
 （上記のサイトはあくまで試験用です。元データから、様々な情報を削除しているため、正確な運行情報を示しているわけではございません。）
 
@@ -52,7 +52,7 @@ GeoJSONとして出力する際に、
 ## 経路のラインデータを作成
 
 ### サンプルデータ
-[こちらの地図](https://mghs15.github.io/bus_stops/map/#13/36.340249/139.033458/&base=pale&ls=pale%7Cbusroute_5070001007099_201911041051226&disp=11&lcd=busroute_5070001007099_201911041051226&vs=c1j0h0k0l0u0t0z0r0s0m0f1&d=vl)でご覧いただけます。
+[こちらの地図](https://mghs15.github.io/bus_stops/map/#13/36.340249/139.033458/&base=pale&ls=pale%7Cbusroute_5070001007099_gtfs.1013.joshin_bus.geojson&disp=11&lcd=busroute_5070001007099_gtfs.1013.joshin_bus.geojson&vs=c1j0h0k0l0u0t0z0r0s0m0f1&d=vlでご覧いただけます。
 
 （上記のサイトはあくまで試験用です。元データから、様々な情報を削除しているため、正確な運行情報を示しているわけではございません。）
 
