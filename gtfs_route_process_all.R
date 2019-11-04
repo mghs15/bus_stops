@@ -24,7 +24,8 @@ D_layerinfo <- NULL
 for(i in 1:nrow(agency_info_df)){
   aginfo <- agency_info_df[i,]
   title <- as.character(aginfo[1,1])
-  lid <- strsplit(as.character(aginfo[1,3]), "\\.")[[1]][1]
+  lid <- as.character(aginfo[1,3])
+#  lid <- strsplit(as.character(aginfo[1,3]), "\\.")[[1]][1]
   url <- paste("./data/route/", as.character(aginfo[1,3]), sep="")
 
   title <- paste('"title": "', title, '",', sep="")
