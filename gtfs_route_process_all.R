@@ -13,7 +13,7 @@ pathList <- list.files("set")
 for(i in 1:length(pathList)){
   path <- paste("set/", pathList[i], sep="")
   setwd(path)
-  make_busroute_geojson("../../data/route/", i)
+  make_busroute_geojson("../../data/route/", pathList[i])
   setwd("../")
   setwd("../")
 }
@@ -31,12 +31,15 @@ for(i in 1:nrow(agency_info_df)){
   lid <- paste('"id": "', lid, '",', sep="")
   url <- paste('"url": "', url, '",', sep="")
 
-  layerinfo <- paste('{"type": "Layer",', title, lid, url, '"cocotile": false,', '"html": "�����I�Ȃ��̂ł���A���m���͕ۏ�ł��܂���B<br>�ȉ��̒��앨�𗘗p�B<br><a href=\'https://gma.jcld.jp/GMA_OPENDATA/\' target=\'_blank\'>�Q�n�����o�X�H�����i�W���I�ȃo�X���t�H�[�}�b�g�j</a>�A�Q�n���A<a href=\'http://creativecommons.org/licenses/by/4.0/deed.ja\' target=\'_blank\'>�N���G�C�e�B�u�E�R�����Y�E���C�Z���X�@�\��4.0.���ہi�O�������N�j</a>"},', sep="\n")
+  layerinfo <- paste('{"type": "Layer",', title, lid, url, '"cocotile": false,', '"html": "実験的なものであり、正確性は保障できません。<br>以下の著作物を利用。<br><a href=\'https://gma.jcld.jp/GMA_OPENDATA/\' target=\'_blank\'>群馬県内バス路線情報（標準的なバス情報フォーマット）</a>、群馬県、<a href=\'http://creativecommons.org/licenses/by/4.0/deed.ja\' target=\'_blank\'>クリエイティブ・コモンズ・ライセンス　表示4.0.国際（外部リンク）</a>"},', sep="\n")
   D_layerinfo <- paste(D_layerinfo, layerinfo, sep="\n")
 }
+head <- '{"layers": [\n{"type": "LayerGroup",\n"title": "バスの運行経路",\n"open": false,\n"toggleall": false,\n"entries": ['
+tail <- ']}]}'
+D_layerinfo <- paste(head, D_layerinfo, tail, sep="\n")
 write.table(  D_layerinfo , "layers_busroute.txt", quote = FALSE, row.names=FALSE, col.names=FALSE)
 
-#���s�̏����A�����R�[�h�A�Ō�̃R���}�͎蓮�ŏ���
+#改行の処理、文字コード、最後のコンマは手動で処理
 
 ######################################
 make_busroute_geojson = function(path = "", tag = ""){
@@ -94,7 +97,7 @@ for(i in 1:length(route_identifier)){
   LDAT[i] <- list(.LDAT_trip)
   names(LDAT)[i] <- .route  
 }
-#�`�F�b�N
+#チェック
 #LDAT
 #str(LDAT)
 
@@ -107,7 +110,7 @@ V_stops_paste <- NULL
 
 for(i in 1:length(route_identifier)){
   .route <- route_identifier[i]
-  .rout_sp_data <- LDAT[[.route]][[1]] # �ŏ���1�������p
+  .rout_sp_data <- LDAT[[.route]][[1]] # 最初の1つだけ利用
   .rout_sp_data <- .rout_sp_data[order(.rout_sp_data$stop_sequence),] 
   .stops_paste <- ""
   for(j in 1:length(.rout_sp_data$stop_name)){
@@ -121,39 +124,39 @@ for(i in 1:length(route_identifier)){
   splinelist[i] <- list(.lines)
 }
 
-#�`�F�b�N
+#チェック
 #str(splinelist)
 
 sp_lines <- SpatialLines(splinelist, proj4string=proj)
 
-#�f�[�^�t���[��
+#データフレーム
 out_agency_name <- rep( agency_name, length(route_identifier) )
 out_agency_id <- rep( agency_id, length(route_identifier) )
 
 #SpatialLinesDataFrame
 lineColors <- rainbow(length(route_identifier)) 
 out_data <- data.frame(operate=out_agency_name, busRoute=V_stops_paste, lineColor=lineColors, row.names = route_identifier)
-colnames(out_data) <- c("�^�s", "�o�H", "_color")
+colnames(out_data) <- c("運行", "経路", "_color")
 sp_line_df <- SpatialLinesDataFrame(sp_lines, data=out_data)
 
 
-#geojson�ŏo��
-now_time <- Sys.time()
-now_time <- gsub(":", "", now_time)
-now_time <- gsub("-", "", now_time)
-now_time <- gsub(" ", "", now_time)
-now_time <- paste(now_time, tag, sep="")
-outputname <- paste(path, "busroute_", agency_id, "_", as.character(now_time), ".geojson", sep="") 
+#geojsonで出力
+#now_time <- Sys.time()
+#now_time <- gsub(":", "", now_time)
+#now_time <- gsub("-", "", now_time)
+#now_time <- gsub(" ", "", now_time)
+#now_time <- paste(now_time, tag, sep="")
+outputname <- paste(path, "busroute_", agency_id, "_", as.character(tag), ".geojson", sep="") 
 writeOGR(sp_line_df, outputname, layer="route", driver="GeoJSON", encoding="SJIS")
 
 plot(sp_line_df)
 
 #output agency information
-agency_info <- paste(agency_name, agency_id, paste("busroute_", agency_id, "_", as.character(now_time), ".geojson", sep=""), sep="\t")
+agency_info <- paste(agency_name, agency_id, paste("busroute_", agency_id, "_", as.character(tag), ".geojson", sep=""), sep="\t")
 write.table(agency_info, paste(path, "agency_info_busroute.txt", sep=""), quote = FALSE, row.names=FALSE, col.names=FALSE, append=TRUE, sep="\t")
 
 
-}#function�����B
+}#functionを閉じる。
 
 
 
