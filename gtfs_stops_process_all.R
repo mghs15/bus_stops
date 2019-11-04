@@ -1,38 +1,41 @@
 library("rgdal")
 library("dplyr")
 setwd("gtfs")
-
+getwd()
 
 pathList <- list.files("set")
 
 for(i in 1:length(pathList)){
   path <- paste("set/", pathList[i], sep="")
   setwd(path)
-  make_busstop_geojson("../../data/", i)
+  make_busstop_geojson("../../data/stop/", i)
   setwd("../")
   setwd("../")
 }
 
 
-########
-agency_info_df <- read.table("data/agency_info.txt", header=FALSE)
+##
+agency_info_df <- read.table("data/stop/agency_info_stops.txt", header=FALSE)
 D_layerinfo <- NULL
 for(i in 1:nrow(agency_info_df)){
   aginfo <- agency_info_df[i,]
   title <- as.character(aginfo[1,1])
   lid <- strsplit(as.character(aginfo[1,3]), "\\.")[[1]][1]
-  url <- paste("./data/", as.character(aginfo[1,3]), sep="")
+  url <- paste("./data/stop/", as.character(aginfo[1,3]), sep="")
 
   title <- paste('"title": "', title, '",', sep="")
   lid <- paste('"id": "', lid, '",', sep="")
   url <- paste('"url": "', url, '",', sep="")
 
-  layerinfo <- paste('{"type": "Layer",', title, lid, url, '"cocotile": false,', '"html": "å®Ÿé¨“çš„ãªã‚‚ã®ã§ã‚ã‚Šã€æ­£ç¢ºæ€§ã¯ä¿éšœã§ãã¾ã›ã‚“ã€‚<br>ä»¥ä¸‹ã®è‘—ä½œç‰©ã‚’åˆ©ç”¨ã€‚<br><a href=\'https://gma.jcld.jp/GMA_OPENDATA/\' target=\'_blank\'>ç¾¤é¦¬çœŒå†…ãƒã‚¹è·¯ç·šæƒ…å ±ï¼ˆæ¨™æº–çš„ãªãƒã‚¹æƒ…å ±ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆï¼‰</a>ã€ç¾¤é¦¬çœŒã€<a href=\'http://creativecommons.org/licenses/by/4.0/deed.ja\' target=\'_blank\'>ã‚¯ãƒªã‚¨ã‚¤ãƒ†ã‚£ãƒ–ãƒ»ã‚³ãƒ¢ãƒ³ã‚ºãƒ»ãƒ©ã‚¤ã‚»ãƒ³ã‚¹ã€€è¡¨ç¤º4.0.å›½éš›ï¼ˆå¤–éƒ¨ãƒªãƒ³ã‚¯ï¼‰</a>"},', sep="\n")
+  layerinfo <- paste('{"type": "Layer",', title, lid, url, '"cocotile": false,', '"html": "ÀŒ±“I‚È‚à‚Ì‚Å‚ ‚èA³Šm«‚Í•Ûá‚Å‚«‚Ü‚¹‚ñB<br>ˆÈ‰º‚Ì’˜ì•¨‚ğ—˜—pB<br><a href=\'https://gma.jcld.jp/GMA_OPENDATA/\' target=\'_blank\'>ŒQ”nŒ§“àƒoƒX˜Hüî•ñi•W€“I‚ÈƒoƒXî•ñƒtƒH[ƒ}ƒbƒgj</a>AŒQ”nŒ§A<a href=\'http://creativecommons.org/licenses/by/4.0/deed.ja\' target=\'_blank\'>ƒNƒŠƒGƒCƒeƒBƒuEƒRƒ‚ƒ“ƒYEƒ‰ƒCƒZƒ“ƒX@•\¦4.0.‘ÛiŠO•”ƒŠƒ“ƒNj</a>"},', sep="\n")
   D_layerinfo <- paste(D_layerinfo, layerinfo, sep="\n")
 }
+head <- '{"layers": [\n{"type": "LayerGroup",\n"title": "ƒoƒX‚Ì‰^sŒo˜H",\n"open": false,\n"toggleall": false,\n"entries": ['
+tail <- ']}]}'
+D_layerinfo <- paste(head, D_layerinfo, tail, sep="\n")
 write.table(  D_layerinfo , "layers_busstop.txt", quote = FALSE, row.names=FALSE, col.names=FALSE)
 
-
+#‰üs‚Ìˆ—A•¶šƒR[ƒhAÅŒã‚ÌƒRƒ“ƒ}‚Íè“®‚Åˆ—
 
 ############################################################################
 #---------start of code---------
@@ -69,20 +72,21 @@ calendar_DAT <- NULL
 for(i in 1:nrow(calendar)){
   calend <- calendar[i,]
   if(calend$monday == 1 & calend$tuesday == 1 & calend$wednesday == 1 & calend$thursday == 1 & calend$friday == 1 & calend$saturday == 1 & calend$sunday == 1 ){
-    sche_day <- "å…¨æ—¥"
+    sche_day <- "–ˆ“ú"
   }else if(calend$monday == 1 & calend$tuesday == 1 & calend$wednesday == 1 & calend$thursday == 1 & calend$friday == 1 & calend$saturday == 0 & calend$sunday == 0 ){
-    sche_day <- "<span style='color: #0000FF;'>å¹³æ—¥ã®ã¿</span>"
+    sche_day <- "<span style='color: #0000FF;'>•½“ú‚Ì‚İ</span>"
   }else if(calend$monday == 0 & calend$tuesday == 0 & calend$wednesday == 0 & calend$thursday == 0 & calend$friday == 0 & calend$saturday == 1 & calend$sunday == 1){
-    sche_day <- "<span style='color: #FF0000;'>ä¼‘æ—¥ã®ã¿</span>"
+    sche_day <- "<span style='color: #FF0000;'>‹x“ú‚Ì‚İ</span>"
   }else{
     sche_day <- ""
-    if(calend$monday == 1){sche_day <- paste(sche_day, "æœˆ", sep="")}
-    if(calend$tuesday == 1){sche_day <- paste(sche_day, "ç«", sep="")}
-    if(calend$wednesday == 1){sche_day <- paste(sche_day, "æ°´", sep="")}
-    if(calend$thursday == 1){sche_day <- paste(sche_day, "æœ¨", sep="")}
-    if(calend$friday == 1){sche_day <- paste(sche_day, "é‡‘", sep="")}
-    if(calend$saturday == 1){sche_day <- paste(sche_day, "åœŸ", sep="")}
-    if(calend$sunday == 1){sche_day <- paste(sche_day, "æ—¥", sep="")}
+    if(calend$monday == 1){sche_day <- paste(sche_day, "Œ", sep="")}
+    if(calend$tuesday == 1){sche_day <- paste(sche_day, "‰Î", sep="")}
+    if(calend$wednesday == 1){sche_day <- paste(sche_day, "…", sep="")}
+    if(calend$thursday == 1){sche_day <- paste(sche_day, "–Ø", sep="")}
+    if(calend$friday == 1){sche_day <- paste(sche_day, "‹à", sep="")}
+    if(calend$saturday == 1){sche_day <- paste(sche_day, "“y", sep="")}
+    if(calend$sunday == 1){sche_day <- paste(sche_day, "“ú", sep="")}
+@@@@if(sche_day == ""){sche_day <- "<span style='color: #FFA500;'>‰^sî•ñ’ˆÓ</span>"} #–{“–‚©H
   }
   calendar_DAT <- c(calendar_DAT, sche_day)
 }
@@ -95,7 +99,7 @@ trip_calendar <- trip_calendar %>% left_join(calendar_shc, by="service_id")
 stop_times <- stop_times %>% left_join(trip_calendar, by="trip_id")
 stop_times %>% head()
 
-#æ™‚é–“ã®ãƒ•ã‚£ãƒ«ã‚¿ãƒªãƒ³ã‚°
+#ŠÔ‚ÌƒtƒBƒ‹ƒ^ƒŠƒ“ƒO
 ymd2time <- function(yyyymmdd){
   N <- length(yyyymmdd)
   TS <- NULL
@@ -115,7 +119,9 @@ stop_times$end_date  <- as.Date(ymd2time(stop_times$end_date) )
 
 today <- Sys.Date()
 
-stop_times <- stop_times %>% filter(start_date < today | end_date > today)
+stop_times <- stop_times %>% filter(is.na(start_date) | start_date < today | end_date > today)
+stop_times$calendar_pattern[is.na(stop_times$calendar_pattern)] <- "<span style='color: #FFA500;'>‰^sî•ñ’ˆÓ</span>" 
+#’èŠú‰^s‚Ì‚İicalendar.txt‚É‘¶İ‚·‚é‚à‚Ìj‚ª‘ÎÛ‚Æ‚È‚éB
 
 
 ########################
@@ -124,22 +130,22 @@ stop_times <- stop_times %>% filter(start_date < today | end_date > today)
 timetb_stops <- as.character(unique(stop_times$stop_id))
 stop_times_DAT <- NULL 
 N <- length(timetb_stops)
-#foræ–‡å†…ã®ã¿ã§åˆ©ç”¨ã™ã‚‹å¤‰æ•°ã«ã¯ã€é ­ã«ã€Œ.ã€ã‚’ä»˜ä¸
+#for•¶“à‚Ì‚İ‚Å—˜—p‚·‚é•Ï”‚É‚ÍA“ª‚Éu.v‚ğ•t—^
 for(i in 1:N){
   .stopId <- timetb_stops[i]
   .times_head  <- stop_times %>% filter(stop_id == .stopId) %>% select(departure_time, trip_headsign, calendar_pattern)
-  .times_head$calendar_pattern[is.na(.times_head$calendar_pattern)] <- "ä¸æ˜"
+  .times_head$calendar_pattern[is.na(.times_head$calendar_pattern)] <- "<span style='color: #FFA500;'>‰^sî•ñ’ˆÓ</span>"
   .times_head  <- .times_head[order(as.POSIXct(.times_head$departure_time, format="%H:%M:%S")),]  
 
-  #å‡ºåŠ›å½¢å¼ã®é¸æŠ
+  #o—ÍŒ`®‚Ì‘I‘ğ
   .is.table <- TRUE
 
   if(.is.table){
 
 ##########
-  #æ™‚é–“éƒ¨åˆ†
+  #ŠÔ•”•ª
   .times_hr <- substr(.times_head$departure_time, 1, 2) 
-  #æ§‹æˆè¦ç´  ï¼ˆæ™‚åˆ»ã€è¡Œå…ˆã€å¹³æ—¥ä¼‘æ—¥ã€€ç­‰ï¼‰ã‚’ã“ã“ã§ä½œã£ã¦ã—ã¾ã†ã€‚
+  #\¬—v‘f iAsæA•½“ú‹x“ú@“™j‚ğ‚±‚±‚Åì‚Á‚Ä‚µ‚Ü‚¤B
   .times_mm <- paste("", substr(.times_head$departure_time, 4, 5), " (", .times_head$trip_headsign , ") ", .times_head$calendar_pattern, "", sep="") 
   .time_head <- data.frame(hour=.times_hr, min_contents=.times_mm)
 
@@ -159,17 +165,17 @@ for(i in 1:N){
   
 ##########
 
-  }else{ã€€#å‡ºåŠ›å½¢å¼ã®é¸æŠ
+  }else{@#o—ÍŒ`®‚Ì‘I‘ğ
 
 ##########
 
-#æ§‹æˆè¦ç´  ï¼ˆæ™‚åˆ»ã€è¡Œå…ˆã€å¹³æ—¥ä¼‘æ—¥ã€€ç­‰ï¼‰
+#\¬—v‘f iAsæA•½“ú‹x“ú@“™j
 #  .head  <- stop_times %>% filter(stop_id == .stopId) %>% select(trip_headsign)
   .times <- substr(as.character(.times_head[,1]), 1, 5) # [,1] =>  as vector
   .heads <- as.character(.times_head[,2]) 
   .schedule <- as.character(.times_head[,3]) 
 
-#ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—æ–‡å­—åˆ—ã‚’ä½œæˆã€‚
+#ƒ|ƒbƒvƒAƒbƒv•¶š—ñ‚ğì¬B
   .times_paste <- NULL
   for(j in 1:length(.times)){
     .times_paste <- paste(.times_paste, "<li>", .times[j], " (", .heads[j], ") ",  .schedule[j], "</li>", sep="")
@@ -179,7 +185,7 @@ for(i in 1:N){
 
 ##########  
 
-  }#å‡ºåŠ›å½¢å¼ã®é¸æŠã‚’é–‰ã˜ã‚‹ï¼ˆ.times_pasteã«å„è¡Œã®å‡ºåŠ›ã‚’å…¥ã‚Œã‚‹ã€‚ï¼‰
+  }#o—ÍŒ`®‚Ì‘I‘ğ‚ğ•Â‚¶‚éi.times_paste‚ÉŠes‚Ìo—Í‚ğ“ü‚ê‚éBj
 
 
   .times_paste <- paste("<div style='max-height:150px;overflow:auto;'>", .times_paste, "</div>", sep="")
@@ -206,8 +212,8 @@ stops.df.n <- stops.df %>% select("stop_name", "stop_lat", "stop_lon", "stop_id"
 coordinates(stops.df.n) = c("stop_lon", "stop_lat")
 stops.df.n@data <- stops.df.n@data %>% select("stop_name", "time_table")
 stops.df.n@data <- stops.df.n@data %>% mutate( agency=rep(agency_name, nrow(stops.df.n@data)) )
-stops.df.n@data <- stops.df.n@data %>% mutate( bikou=rep(paste(Sys.Date(), "æ™‚ç‚¹ã®æƒ…å ±ã‹ã‚‰ä½œæˆ"), nrow(stops.df.n@data)) )
-colnames(stops.df.n@data) <- c("name", "æ™‚åˆ»è¡¨", "é‹è¡Œ", "å‚™è€ƒ")
+stops.df.n@data <- stops.df.n@data %>% mutate( bikou=rep(paste(Sys.Date(), "“_‚Ìî•ñ‚Åì¬"), nrow(stops.df.n@data)) )
+colnames(stops.df.n@data) <- c("name", "•\", "‰^s", "”õl")
 
 plot(stops.df.n)
 class(stops.df.n)
@@ -221,7 +227,7 @@ writeOGR(stops.df.n, output_tile_name , layer="layer", driver="GeoJSON", encodin
 
 #output agency information
 agency_info <- paste(agency_name, agency_id, paste("stops_", agency_id, "_", as.character(now_time), ".geojson", sep=""), sep="\t")
-write.table(agency_info, paste(path, "agency_info.txt", sep=""), quote = FALSE, row.names=FALSE, col.names=FALSE, append=TRUE, sep="\t")
+write.table(agency_info, paste(path, "agency_info_stops.txt", sep=""), quote = FALSE, row.names=FALSE, col.names=FALSE, append=TRUE, sep="\t")
 
-} #å…¨ä½“ã‚’Functionã«ã€‚
+} #‘S‘Ì‚ğFunction‚ÉB
 #---------end of code---------

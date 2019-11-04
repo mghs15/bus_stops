@@ -13,19 +13,19 @@ pathList <- list.files("set")
 for(i in 1:length(pathList)){
   path <- paste("set/", pathList[i], sep="")
   setwd(path)
-  make_busroute_geojson("../../data/", i)
+  make_busroute_geojson("../../data/route/", i)
   setwd("../")
   setwd("../")
 }
 
 ########
-agency_info_df <- read.table("data/agency_info_busroute.txt", header=FALSE)
+agency_info_df <- read.table("data/route/agency_info_busroute.txt", header=FALSE)
 D_layerinfo <- NULL
 for(i in 1:nrow(agency_info_df)){
   aginfo <- agency_info_df[i,]
   title <- as.character(aginfo[1,1])
   lid <- strsplit(as.character(aginfo[1,3]), "\\.")[[1]][1]
-  url <- paste("./data/", as.character(aginfo[1,3]), sep="")
+  url <- paste("./data/route/", as.character(aginfo[1,3]), sep="")
 
   title <- paste('"title": "', title, '",', sep="")
   lid <- paste('"id": "', lid, '",', sep="")
@@ -36,7 +36,7 @@ for(i in 1:nrow(agency_info_df)){
 }
 write.table(  D_layerinfo , "layers_busroute.txt", quote = FALSE, row.names=FALSE, col.names=FALSE)
 
-
+#改行の処理、文字コード、最後のコンマは手動で処理
 
 ######################################
 make_busroute_geojson = function(path = "", tag = ""){
