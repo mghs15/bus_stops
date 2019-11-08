@@ -1,8 +1,6 @@
 # bus_stops
 「標準的なバス情報フォーマット」（GTFS-JP） を使ってみる
 
-
-
 ## バス停ごとの時刻表を作成
 
 ### サンプルデータ
@@ -16,13 +14,10 @@
 * [gsimaps (地理院地図)のソース](https://github.com/gsi-cyberjapan/gsimaps)
 
 ### スクリプト
-```gtfs_test.R```
+```gtfs_stops_process_all.R```
 
 とりあえず、以下のデータを変換して地図上に表示できるようにした。
-[群馬県内バス路線情報（標準的なバス情報フォーマット）](https://gma.jcld.jp/GMA_OPENDATA/)
-のうち、「上信電鉄」と「草軽交通」のデータを利用。
-
-結果は`stops_points`以下に格納した。
+[群馬県内バス路線情報（標準的なバス情報フォーマット）](https://gma.jcld.jp/GMA_OPENDATA/)のデータを利用。
 
 GTFSの一連のファイルのうち、
 
@@ -38,9 +33,7 @@ GTFSの一連のファイルのうち、
 
 ※行先(trip_headsign)はGTFSの必須データではないので注意。
 
-```gtfs_test.R```
-
-曜日も追加できるように修正　
+曜日も追加できるように修正。
 
 ### memo
 エンコードの処理が大変だった。「表」がなぜか「表\」と出力されてしまう（原因は、[こういうこと](http://www.kent-web.com/pubc/garble.html)らしい。）。
@@ -62,12 +55,10 @@ GeoJSONとして出力する際に、
 * [gsimaps (地理院地図)のソース](https://github.com/gsi-cyberjapan/gsimaps)
 
 ### スクリプト
-```gtfs_test2.R```
+```gtfs_route_process_all.R```
 
 経路のラインデータはshapes.txtに入っているらしいのだが、必須項目ではない。そのため、shapes.txtが整備されていないこともあるので、その場合、route_idごとに経由するバス停（stop_id）の経緯度をつないでラインデータとした。
-例として、[群馬県内バス路線情報（標準的なバス情報フォーマット）](https://gma.jcld.jp/GMA_OPENDATA/)のうち、「上信電鉄」と「草軽交通」のデータを利用。
-
-結果は`route_line`以下に格納した。
+例として、[群馬県内バス路線情報（標準的なバス情報フォーマット）](https://gma.jcld.jp/GMA_OPENDATA/)のデータを利用。
 
 経緯度を持つバス停のデータとルートID（route_id）を結び付けるには、まず、バス停のID(stop_id)が属する便のID(trip_id)に結び付け、trip_idを使ってroute_idに結びつける必要がある。ライブラリdplyrを使って、データベースのごとくroute.txt、trips.txt、stop.txt、stops.txtをjoinしてしまえばよい。また、発車時刻（arrival_time）を使って経由するバス停を並び替えた。あるひとつのルートを経由する便は1つ以上あるが、どれでも同じと考え、ひとつだけ取り出してラインデータを作成した。
 
