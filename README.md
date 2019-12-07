@@ -64,7 +64,7 @@ GeoJSONとして出力する際に、
 経路のラインデータはshapes.txtに入っているらしいのだが、必須項目ではない。そのため、shapes.txtが整備されていないこともあるので、その場合、route_idごとに経由するバス停（stop_id）の経緯度をつないでラインデータとした。
 例として、[群馬県内バス路線情報（標準的なバス情報フォーマット）](https://gma.jcld.jp/GMA_OPENDATA/)のデータを利用。
 
-経緯度を持つバス停のデータとルートID（route_id）を結び付けるには、まず、バス停のID(stop_id)が属する便のID(trip_id)に結び付け、trip_idを使ってroute_idに結びつける必要がある。`dplyr`パッケージを使って、データベースのごとくroute.txt、trips.txt、stop.txt、stops.txtをjoinしてしまえばよい。また、~~発車時刻（arrival_time）~~stop_sequenceを使って経由するバス停を並び替えた。あるひとつのルートを経由する便は1つ以上あるが、どれでも同じと考え、ひとつだけ取り出してラインデータを作成した。
+経緯度を持つバス停のデータとルートID（route_id）を結び付けるには、まず、バス停のID(stop_id)が属する便のID(trip_id)に結び付け、trip_idを使ってroute_idに結びつける必要がある。`dplyr`パッケージを使って、データベースのごとくroute.txt、trips.txt、stop.txt、stops.txtをjoinしてしまえばよい。また、stop_sequenceを使って経由するバス停を並び替えた。あるひとつのルートを経由する便は1つ以上あるが、どれでも同じと考え、ひとつだけ取り出してラインデータを作成した。
 
 
 
